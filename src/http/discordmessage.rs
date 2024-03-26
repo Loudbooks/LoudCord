@@ -25,7 +25,7 @@ pub struct Channel {
     pub(crate) icon: Option<String>,
     pub(crate) id: Option<String>,
     pub(crate) last_message_id: Option<String>,
-    pub(crate) last_pin_timestamp: Option<String>, // Note: Change to appropriate type if needed
+    pub(crate) last_pin_timestamp: Option<String>,
     pub(crate) name: Option<String>,
     pub(crate) owner_id: Option<String>,
     pub(crate) r#type: Option<i32>,
