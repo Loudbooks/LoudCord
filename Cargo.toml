@@ -1,0 +1,13 @@
+[package]
+name = "discord_user_apps"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde = { version = "1.0.197", features = ["derive"] }
+serde_json = "1.0.115"
+tiny_http = "0.12.0"
+reqwest = "0.12.2"
+tokio = { version = "1.36.0", features = ["rt", "rt-multi-thread", "macros"] }
