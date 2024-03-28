@@ -22,9 +22,7 @@ impl ListenerHandler {
 
     pub(crate) async fn handle_message(&self, discord_message: &IncomingInteraction) {
         for listener in self.listeners.iter() {
-            if listener.0 == discord_message.data.as_ref().unwrap().name.as_ref().unwrap() {
-                listener.1.on_message(discord_message).await;
-            }
+            listener.1.on_message(discord_message).await;
         }
     }
 

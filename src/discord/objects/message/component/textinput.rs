@@ -1,6 +1,8 @@
+use serde::{Deserialize, Serialize};
 use crate::discord::mapping::componenttype::ComponentType;
 use crate::discord::mapping::textinputstyle::TextInputStyle;
 
+#[derive(Debug, Serialize, Deserialize)]
 pub struct TextInput {
     pub r#type: u8,
     pub custom_id: String,

@@ -1,16 +1,19 @@
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
+
+use crate::discord::mapping::responseflags::ResponseFlag;
 use crate::discord::objects::embed::embed::Embed;
 use crate::discord::objects::message::attachment::Attachment;
-use crate::discord::mapping::responseflags::ResponseFlag;
+use crate::discord::objects::message::component::actionrow::ActionRow;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct InteractionResponseData {
     pub tts: Option<bool>,
     pub content: Option<String>,
     pub embeds: Option<Vec<Embed>>,
-    pub allowed_mentions: Option<serde_json::Value>,
+    pub allowed_mentions: Option<Value>,
     pub flags: Option<i32>,
-    pub components: Option<Vec<serde_json::Value>>,
+    pub components: Option<Vec<ActionRow>>,
     pub attachments: Option<Vec<Attachment>>,
 }
 
@@ -25,9 +28,9 @@ pub struct InteractionResponseDataBuilder {
     tts: Option<bool>,
     content: Option<String>,
     embeds: Option<Vec<Embed>>,
-    allowed_mentions: Option<serde_json::Value>,
+    allowed_mentions: Option<Value>,
     flags: Option<i32>,
-    components: Option<Vec<serde_json::Value>>,
+    components: Option<Vec<ActionRow>>,
     attachments: Option<Vec<Attachment>>,
 }
 
@@ -49,8 +52,8 @@ impl InteractionResponseDataBuilder {
         self
     }
 
-    pub fn content(mut self, content: String) -> Self {
-        self.content = Some(content);
+    pub fn content(mut self, content: &str) -> Self {
+        self.content = Some(content.to_string());
         self
     }
 
@@ -59,7 +62,7 @@ impl InteractionResponseDataBuilder {
         self
     }
 
-    pub fn allowed_mentions(mut self, allowed_mentions: serde_json::Value) -> Self {
+    pub fn allowed_mentions(mut self, allowed_mentions: Value) -> Self {
         self.allowed_mentions = Some(allowed_mentions);
         self
     }
@@ -74,9 +77,12 @@ impl InteractionResponseDataBuilder {
         self.flags = Some(current_value + (flag as i32));
         self
     }
-
-    pub fn components(mut self, components: Vec<serde_json::Value>) -> Self {
-        self.components = Some(components);
+    
+    pub fn add_action_row(mut self, action_row: ActionRow) -> Self {
+        let mut current_components = self.components.unwrap_or_default();
+        
+        current_components.push(action_row);
+        self.components = Some(current_components);
         self
     }
 

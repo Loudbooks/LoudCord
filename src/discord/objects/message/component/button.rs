@@ -15,8 +15,8 @@ pub struct Button {
 }
 
 impl Button {
-    pub fn builder(style: ButtonStyle) -> ButtonBuilder {
-        ButtonBuilder::new(style)
+    pub fn builder(style: ButtonStyle, custom_id: &str) -> ButtonBuilder {
+        ButtonBuilder::new(style, custom_id)
     }
 }
 
@@ -31,20 +31,20 @@ pub struct ButtonBuilder {
 }
 
 impl ButtonBuilder {
-    pub fn new(style: ButtonStyle) -> Self {
+    pub fn new(style: ButtonStyle, custom_id: &str) -> Self {
         ButtonBuilder {
             r#type: ComponentType::Button as u8,
             style,
             label: None,
             emoji: None,
-            custom_id: None,
+            custom_id: Some(custom_id.to_string()),
             url: None,
             disabled: None,
         }
     }
 
-    pub fn label(mut self, label: String) -> Self {
-        self.label = Some(label);
+    pub fn label(mut self, label: &str) -> Self {
+        self.label = Some(label.to_string());
         self
     }
 
@@ -52,14 +52,9 @@ impl ButtonBuilder {
         self.emoji = Some(emoji);
         self
     }
-
-    pub fn custom_id(mut self, custom_id: String) -> Self {
-        self.custom_id = Some(custom_id);
-        self
-    }
-
-    pub fn url(mut self, url: String) -> Self {
-        self.url = Some(url);
+    
+    pub fn url(mut self, url: &str) -> Self {
+        self.url = Some(url.to_string());
         self
     }
 
