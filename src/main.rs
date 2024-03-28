@@ -1,8 +1,3 @@
-use crate::discord::components::command::applicationcommand::ApplicationCommandBuilder;
-use crate::discord::mapping::applicationcommandtype::ApplicationCommandType;
-use crate::discord::mapping::applicationintegrationtype::ApplicationIntegrationType;
-use crate::discord::mapping::applicationinteractioncontexttype::ApplicationInteractionContextType;
-use crate::http::commandregisterer;
 use crate::http::httplistener::HttpListener;
 use crate::http::listenerhandler::ListenerHandler;
 
@@ -19,10 +14,10 @@ async fn main() {
 
     let listener = HttpListener { listener_handler };
 
-    commandregisterer::register_commands(
+    /*commandregisterer::register_commands(
         "token",
         "id",
-        vec!(   
+        vec!(
             ApplicationCommandBuilder::new(
                 "test",
                 "Its a test!",
@@ -40,7 +35,7 @@ async fn main() {
                 )
                 .build()
         )
-    ).await;
+    ).await;*/
 
     listener.start().await.unwrap();
 }
