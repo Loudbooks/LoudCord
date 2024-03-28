@@ -12,3 +12,4 @@ pub mod reaction;
 pub mod messageinteraction;
 pub mod messagereference;
 pub mod interactioncallback;
+pub mod command;

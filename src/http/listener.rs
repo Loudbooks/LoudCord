@@ -9,11 +9,11 @@ use crate::http::listenerhandler;
 pub trait Listener {
     async fn on_message(&self, discord_message: &DiscordMessage);
 
-    async fn reply(&self, response: String, discord_message: &DiscordMessage) {
+    async fn reply(&self, response: &str, discord_message: &DiscordMessage) {
         let response = InteractionResponse {
             r#type: ResponseType::Message,
             data: InteractionCallback::builder()
-                .content(response)
+                .content(response.to_string())
                 .build()
         };
 

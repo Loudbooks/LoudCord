@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use reqwest::Client;
 use reqwest::header::{CONTENT_TYPE, HeaderMap, HeaderValue};
 use crate::discord::interaction::DiscordMessage;
@@ -6,23 +7,25 @@ use crate::http::listener::Listener;
 
 
 pub struct ListenerHandler {
-    listeners: Vec<Box<dyn Listener>>,
+    listeners: HashMap<String, Box<dyn Listener>>,
 }
 
 impl ListenerHandler {
-    pub fn new() -> Self {
-        Self {
-            listeners: Vec::new(),
+    pub fn new() -> ListenerHandler {
+        ListenerHandler {
+            listeners: HashMap::new(),
         }
     }
-
-    pub fn add_listener(&mut self, listener: Box<dyn Listener>) {
-        self.listeners.push(listener);
+    
+    pub fn add_listener(&mut self, command: String, listener: Box<dyn Listener>) {
+        self.listeners.insert(command, listener);
     }
 
     pub(crate) async fn handle_message(&self, discord_message: &DiscordMessage) {
         for listener in self.listeners.iter() {
-            listener.on_message(discord_message).await;
+            if listener.0 == discord_message.data.as_ref().unwrap().name.as_ref().unwrap() {
+                listener.1.on_message(discord_message).await;
+            }
         }
     }
 

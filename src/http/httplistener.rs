@@ -29,9 +29,7 @@ impl HttpListener {
     async fn handle_connection(&self, mut request: Request) -> std::io::Result<()> {
         let mut input = String::new();
         request.as_reader().read_to_string(&mut input)?;
-
-        println!("{:?}", input);
-
+        
         let message = serde_json::from_str::<DiscordMessage>(input.as_str()).unwrap_or_else(|e| {
             panic!("{:?}", e);
         });

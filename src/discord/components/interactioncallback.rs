@@ -1,12 +1,13 @@
 use serde::{Deserialize, Serialize};
 use crate::discord::components::attachment::Attachment;
+use crate::discord::components::embed::embed::Embed;
 use crate::discord::mapping::responseflags::ResponseFlag;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct InteractionCallback {
     pub tts: Option<bool>,
     pub content: Option<String>,
-    pub embeds: Option<Vec<serde_json::Value>>,
+    pub embeds: Option<Vec<Embed>>,
     pub allowed_mentions: Option<serde_json::Value>,
     pub flags: Option<i32>,
     pub components: Option<Vec<serde_json::Value>>,
@@ -23,7 +24,7 @@ impl InteractionCallback {
 pub struct InteractionCallbackBuilder {
     tts: Option<bool>,
     content: Option<String>,
-    embeds: Option<Vec<serde_json::Value>>,
+    embeds: Option<Vec<Embed>>,
     allowed_mentions: Option<serde_json::Value>,
     flags: Option<i32>,
     components: Option<Vec<serde_json::Value>>,
@@ -53,7 +54,7 @@ impl InteractionCallbackBuilder {
         self
     }
 
-    pub fn embeds(mut self, embeds: Vec<serde_json::Value>) -> Self {
+    pub fn embeds(mut self, embeds: Vec<Embed>) -> Self {
         self.embeds = Some(embeds);
         self
     }
