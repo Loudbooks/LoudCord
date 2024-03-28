@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 pub mod discord;
 pub mod http;
 pub mod listeners;

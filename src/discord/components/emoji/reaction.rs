@@ -1,7 +1,8 @@
 use serde::Deserialize;
 
-use crate::discord::components::emoji::Emoji;
-use crate::discord::components::reaction::reactioncountdetails::ReactionCountDetails;
+use crate::discord::components::emoji::reactioncountdetails::ReactionCountDetails;
+
+use super::emoji::Emoji;
 
 #[derive(Debug, Deserialize)]
 pub struct Reaction {

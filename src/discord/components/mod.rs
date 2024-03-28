@@ -1,15 +1,8 @@
+pub mod interaction;
 pub mod channel;
-pub mod guildmember;
 pub mod message;
-pub mod threadmetadata;
 pub mod user;
-pub mod overwrite;
-pub mod channelmention;
-pub mod attachment;
 pub mod embed;
 pub mod emoji;
-pub mod reaction;
-pub mod messageinteraction;
-pub mod messagereference;
-pub mod interactioncallback;
 pub mod command;
+pub mod miscellaneous;

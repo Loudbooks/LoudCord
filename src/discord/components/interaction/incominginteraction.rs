@@ -1,10 +1,10 @@
 use serde::Deserialize;
-use crate::discord::components::channel::Channel;
-use crate::discord::components::user::User;
+use crate::discord::components::channel::channel::Channel;
+use crate::discord::components::user::user::User;
 
 #[allow(dead_code)]
 #[derive(Debug, Deserialize)]
-pub struct DiscordMessage {
+pub struct IncomingInteraction {
     pub app_permissions: Option<String>,
     pub application_id: Option<String>,
     pub channel: Option<Channel>,

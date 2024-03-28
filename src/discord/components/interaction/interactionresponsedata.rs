@@ -1,10 +1,10 @@
 use serde::{Deserialize, Serialize};
-use crate::discord::components::attachment::Attachment;
 use crate::discord::components::embed::embed::Embed;
+use crate::discord::components::message::attachment::Attachment;
 use crate::discord::mapping::responseflags::ResponseFlag;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct InteractionCallback {
+pub struct InteractionResponseData {
     pub tts: Option<bool>,
     pub content: Option<String>,
     pub embeds: Option<Vec<Embed>>,
@@ -15,13 +15,13 @@ pub struct InteractionCallback {
 }
 
 
-impl InteractionCallback {
-    pub fn builder() -> InteractionCallbackBuilder {
-        InteractionCallbackBuilder::new()
+impl InteractionResponseData {
+    pub fn builder() -> InteractionResponseDataBuilder {
+        InteractionResponseDataBuilder::new()
     }
 }
 
-pub struct InteractionCallbackBuilder {
+pub struct InteractionResponseDataBuilder {
     tts: Option<bool>,
     content: Option<String>,
     embeds: Option<Vec<Embed>>,
@@ -31,9 +31,9 @@ pub struct InteractionCallbackBuilder {
     attachments: Option<Vec<Attachment>>,
 }
 
-impl InteractionCallbackBuilder {
+impl InteractionResponseDataBuilder {
     pub fn new() -> Self {
-        InteractionCallbackBuilder {
+        InteractionResponseDataBuilder {
             tts: None,
             content: None,
             embeds: None,
@@ -85,8 +85,8 @@ impl InteractionCallbackBuilder {
         self
     }
 
-    pub fn build(self) -> InteractionCallback {
-        InteractionCallback {
+    pub fn build(self) -> InteractionResponseData {
+        InteractionResponseData {
             tts: self.tts,
             content: self.content,
             embeds: self.embeds,

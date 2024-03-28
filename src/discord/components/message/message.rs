@@ -1,11 +1,11 @@
 use serde::Deserialize;
-use crate::discord::components::attachment::Attachment;
-use crate::discord::components::channel::Channel;
-use crate::discord::components::channelmention::ChannelMention;
+use crate::discord::components::channel::channel::Channel;
+use crate::discord::components::channel::channelmention::ChannelMention;
 use crate::discord::components::embed::embed::Embed;
-use crate::discord::components::messageinteraction::MessageInteractionMetadata;
-use crate::discord::components::reaction::reaction::Reaction;
-use crate::discord::components::user::User;
+use crate::discord::components::emoji::reaction::Reaction;
+use crate::discord::components::message::attachment::Attachment;
+use crate::discord::components::message::messageinteraction::MessageInteractionMetadata;
+use crate::discord::components::user::user::User;
 
 #[derive(Debug, Deserialize)]
 pub struct Message {

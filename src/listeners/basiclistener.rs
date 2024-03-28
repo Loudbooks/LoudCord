@@ -2,9 +2,9 @@ use async_trait::async_trait;
 use crate::discord::components::embed::embed::EmbedBuilder;
 use crate::discord::components::embed::embedfield::EmbedField;
 use crate::discord::components::embed::embedfooter::EmbedFooter;
-use crate::discord::components::interactioncallback::InteractionCallback;
-use crate::discord::interaction::DiscordMessage;
-use crate::discord::interactionresponse::InteractionResponse;
+use crate::discord::components::interaction::incominginteraction::IncomingInteraction;
+use crate::discord::components::interaction::interactionresponse::InteractionResponse;
+use crate::discord::components::interaction::interactionresponsedata::InteractionResponseData;
 use crate::discord::mapping::responsetype::ResponseType;
 use crate::http::listener::Listener;
 
@@ -12,10 +12,10 @@ pub(crate) struct BasicListener {}
 
 #[async_trait]
 impl Listener for BasicListener {
-    async fn on_message(&self, discord_message: &DiscordMessage) {
-        let response = InteractionResponse {
+    async fn on_message(&self, discord_message: &IncomingInteraction) {
+        let response: InteractionResponse = InteractionResponse {
             r#type: ResponseType::Message,
-            data: InteractionCallback::builder()
+            data: InteractionResponseData::builder()
                 .embeds(vec!(
                     EmbedBuilder::new()
                         .title("Title")
@@ -32,6 +32,6 @@ impl Listener for BasicListener {
                 .build()
         };
         
-        self.callback(response, discord_message).await;
+        self.interaction_callback(response, discord_message).await;
     }
 }
