@@ -1,4 +1,4 @@
-# Discord User Installed Apps
+# LoudCord
 
 This application creates a very basic low level way of interacting with the new user installed apps API for Discord
 
