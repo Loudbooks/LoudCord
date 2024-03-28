@@ -12,3 +12,7 @@ pub mod applicationcommandoptiontype;
 pub mod applicationintegrationtype;
 pub mod applicationinteractioncontexttype;
 pub mod embedtype;
+pub mod componenttype;
+pub mod buttonstyle;
+pub mod selectmenutype;
+pub mod textinputstyle;
