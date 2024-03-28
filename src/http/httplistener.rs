@@ -1,6 +1,6 @@
 use tiny_http::Request;
 
-use crate::http::discordmessage::DiscordMessage;
+use crate::discord::interaction::DiscordMessage;
 use crate::http::listenerhandler::ListenerHandler;
 
 pub struct HttpListener {
@@ -9,7 +9,13 @@ pub struct HttpListener {
 
 impl HttpListener {
     pub async fn start(&self) -> std::io::Result<()> {
-        let server = tiny_http::Server::http("127.0.0.1:3000").unwrap();
+        let server = {
+            let this = tiny_http::Server::http("127.0.0.1:3000");
+            match this {
+                Ok(t) => t,
+                Err(e) => panic!("{:?}", e),
+            }
+        };
 
         println!("Listening on port 3000!");
 
@@ -20,12 +26,11 @@ impl HttpListener {
         Ok(())
     }
 
-    async fn handle_connection(
-        &self,
-        mut request: Request,
-    ) -> std::io::Result<()> {
+    async fn handle_connection(&self, mut request: Request) -> std::io::Result<()> {
         let mut input = String::new();
         request.as_reader().read_to_string(&mut input)?;
+
+        println!("{:?}", input);
 
         let message = serde_json::from_str::<DiscordMessage>(input.as_str()).unwrap_or_else(|e| {
             panic!("{:?}", e);

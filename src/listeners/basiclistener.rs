@@ -1,25 +1,24 @@
-use serde_json::json;
+use async_trait::async_trait;
+use crate::discord::components::interactioncallback::InteractionCallback;
+use crate::discord::interaction::DiscordMessage;
+use crate::discord::interactionresponse::InteractionResponse;
+use crate::discord::mapping::responsetype::ResponseType;
 use crate::http::listener::Listener;
 
 pub(crate) struct BasicListener {}
 
+#[async_trait]
 impl Listener for BasicListener {
-    fn on_message(&self, _discord_message: &crate::http::discordmessage::DiscordMessage) -> serde_json::Value {
-        json!({
-            "type": 4,
-            "data": {
-                "embeds": [
-                    {
-                        "type": "rich",
-                        "title": "MysticExplorer23 Profile (lvl 17)",
-                        "color": 9866143,
-                        "url": "https://discord.com/developers/docs/intro",
-                        "thumbnail": {
-                            "url": "https://raw.githubusercontent.com/shaydewael/example-app/main/assets/fake-icon.png"
-                        }
-                    }
-                ]
-            }
-        })
+    async fn on_message(&self, discord_message: &DiscordMessage) {
+        println!("aaa");
+        
+        let response = InteractionResponse {
+            r#type: ResponseType::Message,
+            data: InteractionCallback::builder()
+                .content("Hello, world!".to_string())
+                .build()
+        };
+        
+        self.callback(response, discord_message).await;
     }
 }
