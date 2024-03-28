@@ -5,7 +5,6 @@ use crate::discord::objects::channel::channelmention::ChannelMention;
 use crate::discord::objects::embed::embed::Embed;
 use crate::discord::objects::emoji::reaction::Reaction;
 use crate::discord::objects::message::attachment::Attachment;
-use crate::discord::objects::message::component::button::Button;
 use crate::discord::objects::message::messageinteraction::MessageInteractionMetadata;
 use crate::discord::objects::message::sticker::Sticker;
 use crate::discord::objects::message::stickeritem::StickerItem;
@@ -38,7 +37,3 @@ pub struct Message {
     pub stickers: Option<Vec<Sticker>>,
     pub position: Option<i32>,
 }
-
-
-
-
