@@ -8,11 +8,14 @@ mod utils;
 
 #[tokio::main]
 async fn main() {
-    let mut listener_handler = ListenerHandler::new();
+    let mut listener_handler: ListenerHandler = ListenerHandler::new();
 
-    listener_handler.add_listener("test".to_string(), Box::new(listeners::basiclistener::BasicListener {}));
+    listener_handler.add_listener(
+        "test".to_string(),
+        Box::new(listeners::basiclistener::BasicListener {})
+    );
 
-    let listener = HttpListener { listener_handler };
+    let listener: HttpListener = HttpListener { listener_handler };
 
     /*commandregisterer::register_commands(
         "token",
