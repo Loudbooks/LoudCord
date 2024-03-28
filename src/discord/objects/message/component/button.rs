@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use crate::discord::components::emoji::emoji::Emoji;
+use crate::discord::objects::emoji::emoji::Emoji;
 use crate::discord::mapping::buttonstyle::ButtonStyle;
 use crate::discord::mapping::componenttype::ComponentType;
 

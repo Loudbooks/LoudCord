@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use serde::Serialize;
-use crate::discord::components::command::applicationcommandoptionchoice::ApplicationCommandOptionChoice;
+use crate::discord::objects::command::applicationcommandoptionchoice::ApplicationCommandOptionChoice;
 use crate::discord::mapping::applicationcommandoptiontype::ApplicationCommandOptionType;
 use crate::discord::mapping::channeltype::ChannelType;
 

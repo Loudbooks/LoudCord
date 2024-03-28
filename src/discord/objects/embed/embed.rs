@@ -1,11 +1,11 @@
 use serde::{Deserialize, Serialize};
-use crate::discord::components::embed::embedauthor::EmbedAuthor;
-use crate::discord::components::embed::embedfield::EmbedField;
-use crate::discord::components::embed::embedfooter::EmbedFooter;
-use crate::discord::components::embed::embedimage::EmbedImage;
-use crate::discord::components::embed::embedprovider::EmbedProvider;
-use crate::discord::components::embed::embedthumbnail::EmbedThumbnail;
-use crate::discord::components::embed::embedvideo::EmbedVideo;
+use crate::discord::objects::embed::embedauthor::EmbedAuthor;
+use crate::discord::objects::embed::embedfield::EmbedField;
+use crate::discord::objects::embed::embedfooter::EmbedFooter;
+use crate::discord::objects::embed::embedimage::EmbedImage;
+use crate::discord::objects::embed::embedprovider::EmbedProvider;
+use crate::discord::objects::embed::embedthumbnail::EmbedThumbnail;
+use crate::discord::objects::embed::embedvideo::EmbedVideo;
 use crate::discord::mapping::embedtype::EmbedType;
 
 #[derive(Debug, Serialize, Deserialize)]

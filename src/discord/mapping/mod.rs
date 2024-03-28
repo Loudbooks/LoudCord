@@ -16,3 +16,5 @@ pub mod componenttype;
 pub mod buttonstyle;
 pub mod selectmenutype;
 pub mod textinputstyle;
+pub mod stickerformattype;
+pub mod stickertype;

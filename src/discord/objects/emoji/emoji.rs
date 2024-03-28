@@ -1,7 +1,7 @@
-use serde::Deserialize;
-use crate::discord::components::user::user::User;
+use serde::{Deserialize, Serialize};
+use crate::discord::objects::user::user::User;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Emoji {
     pub id: Option<String>,
     pub name: Option<String>,

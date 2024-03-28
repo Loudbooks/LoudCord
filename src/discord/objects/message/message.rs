@@ -1,11 +1,15 @@
 use serde::Deserialize;
-use crate::discord::components::channel::channel::Channel;
-use crate::discord::components::channel::channelmention::ChannelMention;
-use crate::discord::components::embed::embed::Embed;
-use crate::discord::components::emoji::reaction::Reaction;
-use crate::discord::components::message::attachment::Attachment;
-use crate::discord::components::message::messageinteraction::MessageInteractionMetadata;
-use crate::discord::components::user::user::User;
+use serde_json::Value;
+use crate::discord::objects::channel::channel::Channel;
+use crate::discord::objects::channel::channelmention::ChannelMention;
+use crate::discord::objects::embed::embed::Embed;
+use crate::discord::objects::emoji::reaction::Reaction;
+use crate::discord::objects::message::attachment::Attachment;
+use crate::discord::objects::message::component::button::Button;
+use crate::discord::objects::message::messageinteraction::MessageInteractionMetadata;
+use crate::discord::objects::message::sticker::Sticker;
+use crate::discord::objects::message::stickeritem::StickerItem;
+use crate::discord::objects::user::user::User;
 
 #[derive(Debug, Deserialize)]
 pub struct Message {
@@ -29,9 +33,9 @@ pub struct Message {
     pub flags: Option<i32>,
     pub interaction_metadata: Option<MessageInteractionMetadata>,
     pub thread: Option<Channel>,
-    // pub components: Option<Vec<MessageComponent>>,
-    // pub sticker_items: Option<Vec<MessageStickerItem>>,
-    // pub stickers: Option<Vec<Sticker>>,
+    pub objects: Option<Vec<Value>>,
+    pub sticker_items: Option<Vec<StickerItem>>,
+    pub stickers: Option<Vec<Sticker>>,
     pub position: Option<i32>,
 }
 

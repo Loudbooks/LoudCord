@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
-use crate::discord::components::embed::embed::Embed;
-use crate::discord::components::message::attachment::Attachment;
+use crate::discord::objects::embed::embed::Embed;
+use crate::discord::objects::message::attachment::Attachment;
 use crate::discord::mapping::responseflags::ResponseFlag;
 
 #[derive(Debug, Serialize, Deserialize)]

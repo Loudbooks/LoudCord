@@ -1,10 +1,10 @@
 use serde::Deserialize;
 
-use crate::discord::components::emoji::defaultreaction::DefaultReaction;
-use crate::discord::components::miscellaneous::permissionoverwrite::Overwrite;
-use crate::discord::components::miscellaneous::threadmetadata::ThreadMetadata;
-use crate::discord::components::user::guildmember::GuildMember;
-use crate::discord::components::user::user::User;
+use crate::discord::objects::emoji::defaultreaction::DefaultReaction;
+use crate::discord::objects::miscellaneous::permissionoverwrite::Overwrite;
+use crate::discord::objects::miscellaneous::threadmetadata::ThreadMetadata;
+use crate::discord::objects::user::guildmember::GuildMember;
+use crate::discord::objects::user::user::User;
 use crate::discord::mapping::{
     channeltype::ChannelType, videoqualitymode::VideoQualityMode,
 };

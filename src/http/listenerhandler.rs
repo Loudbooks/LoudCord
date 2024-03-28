@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 use reqwest::Client;
 use reqwest::header::{ CONTENT_TYPE, HeaderMap, HeaderValue };
-use crate::discord::components::interaction::incominginteraction::IncomingInteraction;
-use crate::discord::components::interaction::interactionresponse::InteractionResponse;
+use crate::discord::objects::interaction::incominginteraction::IncomingInteraction;
+use crate::discord::objects::interaction::interactionresponse::InteractionResponse;
 use crate::http::listener::Listener;
 
 pub struct ListenerHandler {

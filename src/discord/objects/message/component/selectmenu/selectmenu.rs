@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use crate::discord::components::message::component::selectmenu::selectoption::SelectOption;
+use crate::discord::objects::message::component::selectmenu::selectoption::SelectOption;
 use crate::discord::mapping::selectmenutype::SelectMenuType;
 
 #[derive(Debug, Serialize, Deserialize)]

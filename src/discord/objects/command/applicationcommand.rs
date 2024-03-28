@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use serde::Serialize;
 
-use crate::discord::components::command::applicationcommandsoption::ApplicationCommandOption;
+use crate::discord::objects::command::applicationcommandsoption::ApplicationCommandOption;
 use crate::discord::mapping::applicationcommandtype::ApplicationCommandType;
 use crate::discord::mapping::applicationintegrationtype::ApplicationIntegrationType;
 use crate::discord::mapping::applicationinteractioncontexttype::ApplicationInteractionContextType;

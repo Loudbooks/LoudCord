@@ -1,5 +1,5 @@
 use serde::Serialize;
-use crate::discord::components::interaction::interactionresponsedata::InteractionResponseData;
+use crate::discord::objects::interaction::interactionresponsedata::InteractionResponseData;
 use crate::discord::mapping::responsetype::ResponseType;
 
 #[derive(Serialize)]

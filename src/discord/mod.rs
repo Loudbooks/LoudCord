@@ -1,2 +1,2 @@
 pub mod mapping;
-pub mod components;
+pub mod objects;

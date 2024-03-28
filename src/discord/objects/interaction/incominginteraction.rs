@@ -1,6 +1,6 @@
 use serde::Deserialize;
-use crate::discord::components::channel::channel::Channel;
-use crate::discord::components::user::user::User;
+use crate::discord::objects::channel::channel::Channel;
+use crate::discord::objects::user::user::User;
 
 #[allow(dead_code)]
 #[derive(Debug, Deserialize)]

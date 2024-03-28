@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use crate::discord::components::emoji::reactioncountdetails::ReactionCountDetails;
+use crate::discord::objects::emoji::reactioncountdetails::ReactionCountDetails;
 
 use super::emoji::Emoji;
 

@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use crate::discord::components::user::user::User;
+use crate::discord::objects::user::user::User;
 
 #[derive(Debug, Deserialize)]
 pub struct GuildMember {

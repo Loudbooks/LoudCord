@@ -1,5 +1,5 @@
 use tiny_http::Request;
-use crate::discord::components::interaction::incominginteraction::IncomingInteraction;
+use crate::discord::objects::interaction::incominginteraction::IncomingInteraction;
 
 use crate::http::listenerhandler::ListenerHandler;
 

@@ -1,7 +1,7 @@
 use reqwest::Client;
 use reqwest::header::{CONTENT_TYPE, HeaderMap};
 
-use crate::discord::components::command::applicationcommand::ApplicationCommand;
+use crate::discord::objects::command::applicationcommand::ApplicationCommand;
 
 pub async fn register_commands(bot_token: &str, application_id: &str, application_commands: Vec<ApplicationCommand>) {
     let url = format!("applications/{}/commands", application_id);
