@@ -10,7 +10,7 @@ pub struct SelectMenu {
 }
 
 impl SelectMenu {
-    pub fn builder(custom_id: String, select_menu_type: SelectMenuType) -> SelectMenuBuilder {
+    pub fn builder(custom_id: &str, select_menu_type: SelectMenuType) -> SelectMenuBuilder {
         SelectMenuBuilder::new(custom_id, select_menu_type)
     }
 }
@@ -22,10 +22,10 @@ pub struct SelectMenuBuilder {
 }
 
 impl SelectMenuBuilder {
-    pub fn new(custom_id: String, select_menu_type: SelectMenuType) -> Self {
+    pub fn new(custom_id: &str, select_menu_type: SelectMenuType) -> Self {
         SelectMenuBuilder {
             r#type: select_menu_type,
-            custom_id,
+            custom_id: custom_id.to_string(),
             options: Vec::new(),
         }
     }

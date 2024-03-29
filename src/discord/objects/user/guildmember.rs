@@ -1,7 +1,7 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use crate::discord::objects::user::user::User;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GuildMember {
     pub user: Option<User>,
     pub nick: Option<String>,

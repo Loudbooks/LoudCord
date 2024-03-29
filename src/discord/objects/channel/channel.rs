@@ -1,4 +1,4 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::discord::objects::emoji::defaultreaction::DefaultReaction;
 use crate::discord::objects::miscellaneous::permissionoverwrite::Overwrite;
@@ -10,7 +10,7 @@ use crate::discord::mapping::{
 };
 
 #[allow(dead_code)]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Channel {
     pub id: String,
     pub r#type: ChannelType,

@@ -35,6 +35,8 @@ impl HttpListener {
         
         let is_valid = authorization::verify_message(self.public_key.as_str(), request.headers(), input.as_str());
         
+        println!("{}", input);
+        
         let message = serde_json::from_str::<IncomingInteraction>(input.as_str()).unwrap_or_else(|e| {
             panic!("{:?}", e);
         });
@@ -55,7 +57,7 @@ impl HttpListener {
             println!("Valid message!")
         }
  
-        if message.r#type.unwrap() == InteractionType::Ping as i32 {
+        if message.r#type.clone().unwrap() == InteractionType::Ping {
             request.respond(tiny_http::Response::from_string("{\"type\": 1}")).unwrap();
             println!("Pong!");
             return Ok(());

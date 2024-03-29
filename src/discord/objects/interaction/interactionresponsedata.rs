@@ -17,7 +17,6 @@ pub struct InteractionResponseData {
     pub attachments: Option<Vec<Attachment>>,
 }
 
-
 impl InteractionResponseData {
     pub fn builder() -> InteractionResponseDataBuilder {
         InteractionResponseDataBuilder::new()

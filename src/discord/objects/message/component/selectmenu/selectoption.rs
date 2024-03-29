@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use crate::discord::objects::emoji::emoji::Emoji;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SelectOption {
     pub label: String,
     pub value: String,
