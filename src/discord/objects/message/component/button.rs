@@ -55,6 +55,7 @@ impl ButtonBuilder {
     
     pub fn url(mut self, url: &str) -> Self {
         self.url = Some(url.to_string());
+        self.custom_id = None;
         self
     }
 

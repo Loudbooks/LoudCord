@@ -95,8 +95,9 @@ impl Listener for BasicListener {
                 .add_action_row(
                     ActionRowBuilder::new()
                         .add_button(
-                            ButtonBuilder::new(ButtonStyle::Primary, "test")
-                                .label("hello")
+                            ButtonBuilder::new(ButtonStyle::Link, "test")
+                                .label("google")
+                                .url("https://google.com")
                                 .build()
                         )
                         .build()
