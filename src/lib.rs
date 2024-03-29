@@ -2,18 +2,7 @@
 
 use async_trait::async_trait;
 
-use crate::discord::mapping::interactiontype::InteractionType;
-use crate::discord::mapping::responsetype::ResponseType;
-use crate::discord::mapping::selectmenutype::SelectMenuType;
-use crate::discord::objects::embed::embed::EmbedBuilder;
-use crate::discord::objects::embed::embedfield::EmbedField;
-use crate::discord::objects::embed::embedfooter::EmbedFooter;
 use crate::discord::objects::interaction::incominginteraction::IncomingInteraction;
-use crate::discord::objects::interaction::interactionresponse::InteractionResponse;
-use crate::discord::objects::interaction::interactionresponsedata::InteractionResponseData;
-use crate::discord::objects::message::component::actionrow::ActionRowBuilder;
-use crate::discord::objects::message::component::selectmenu::selectmenu::SelectMenuBuilder;
-use crate::discord::objects::message::component::selectmenu::selectoption::SelectOption;
 use crate::http::listener::Listener;
 
 pub mod discord;
@@ -22,11 +11,14 @@ pub mod http;
 #[cfg(test)]
 mod tests {
     use dotenv::dotenv;
+
     use crate::BasicListener;
+    use crate::discord::mapping::applicationcommandoptiontype::ApplicationCommandOptionType;
     use crate::discord::mapping::applicationcommandtype::ApplicationCommandType;
     use crate::discord::mapping::applicationintegrationtype::ApplicationIntegrationType;
     use crate::discord::mapping::applicationinteractioncontexttype::ApplicationInteractionContextType;
     use crate::discord::objects::command::applicationcommand::ApplicationCommandBuilder;
+    use crate::discord::objects::command::applicationcommandsoption::ApplicationCommandOptionBuilder;
     use crate::http::commandregisterer;
     use crate::http::httplistener::HttpListener;
     use crate::http::listenerhandler::ListenerHandler;
@@ -51,8 +43,8 @@ mod tests {
             &std::env::var("APPLICATION_ID").expect("APPLICATION_ID must be set."),
             vec!(
                 ApplicationCommandBuilder::new(
-                    "test",
-                    "Its a test!",
+                    "say",
+                    "Says what you want!",
                     ApplicationCommandType::ChatInput,
                     vec!(
                         ApplicationInteractionContextType::Guild,
@@ -60,6 +52,11 @@ mod tests {
                         ApplicationInteractionContextType::PrivateChannel
                     )
                 )
+                    .options(
+                        vec!(ApplicationCommandOptionBuilder::new(ApplicationCommandOptionType::String, "string", "What to say")
+                            .required(true)
+                            .build())
+                    )
                     .integration_types(
                         vec!(
                             ApplicationIntegrationType::UserInstall
@@ -77,56 +74,10 @@ pub(crate) struct BasicListener {}
 
 #[async_trait]
 impl Listener for BasicListener {
-    async fn on_message(&self, discord_message: &IncomingInteraction) {
-        if discord_message.r#type.clone().unwrap() == InteractionType::MessageComponent {
-            let selected_option = discord_message.data.clone().unwrap().values.unwrap().get(0).unwrap().clone();
-            
-            let response: InteractionResponse = InteractionResponse {
-                r#type: ResponseType::Message,
-                data: Some(InteractionResponseData::builder()
-                    .content(
-                        format!("You selected: {}", selected_option).as_str()
-                    )
-                    .build())
-            };
+    async fn on_message(&self, incoming_interaction: &IncomingInteraction) {
+        let options = incoming_interaction.data.clone().unwrap().options.unwrap();
+        let input = options.get(0).unwrap();
 
-            self.interaction_callback(response, discord_message).await;
-        } else {
-            let response: InteractionResponse = InteractionResponse {
-                r#type: ResponseType::Message,
-                data: Some(InteractionResponseData::builder()
-                    .embeds(vec!(
-                        EmbedBuilder::new()
-                            .title("Title")
-                            .description("Description")
-                            .color(0x00FF00)
-                            .footer(EmbedFooter::new("Footer"))
-                            .fields(vec!(
-                                EmbedField::new("Field 1", "Value 1", true),
-                                EmbedField::new("Field 2", "Value 2", true),
-                                EmbedField::new("Field 3", "Value 3", true),
-                            ))
-                            .build()
-                    ))
-                    .add_action_row(
-                        ActionRowBuilder::new().add_select_menu(
-                            SelectMenuBuilder::new("test", SelectMenuType::String)
-                                .option(
-                                    SelectOption::builder("Option 1".to_string(), "option1".to_string())
-                                        .description("Description".to_string())
-                                        .build()
-                                )
-                                .option(
-                                    SelectOption::builder("Option 2".to_string(), "option2".to_string())
-                                        .description("Description".to_string())
-                                        .build()
-                                )
-                                .build()
-                        ).build()
-                    ).build())
-            };
-
-            self.interaction_callback(response, discord_message).await;
-        }
+        self.reply(input.clone().value.unwrap().as_str(), incoming_interaction).await;
     }
 }

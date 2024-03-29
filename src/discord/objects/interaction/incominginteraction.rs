@@ -4,6 +4,7 @@ use crate::discord::mapping::applicationcommandtype::ApplicationCommandType;
 use crate::discord::mapping::applicationinteractioncontexttype::ApplicationInteractionContextType;
 use crate::discord::mapping::interactiontype::InteractionType;
 use crate::discord::objects::channel::channel::Channel;
+use crate::discord::objects::command::applicationcommandinteractiondataoption::ApplicationCommandInteractionDataOption;
 use crate::discord::objects::user::user::User;
 
 #[allow(dead_code)]
@@ -22,6 +23,7 @@ pub struct IncomingInteraction {
     pub r#type: Option<InteractionType>,
     pub user: Option<User>,
     pub version: Option<i32>,
+    pub options: Option<Vec<Options>>,
 }
 
 #[allow(dead_code)]
@@ -29,7 +31,7 @@ pub struct IncomingInteraction {
 pub struct Data {
     pub id: Option<String>,
     pub name: Option<String>,
-    pub options: Option<Vec<Option<String>>>,
+    pub options: Option<Vec<ApplicationCommandInteractionDataOption>>,
     pub r#type: Option<ApplicationCommandType>,
     
     // Action row only

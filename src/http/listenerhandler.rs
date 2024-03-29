@@ -20,17 +20,17 @@ impl ListenerHandler {
         self.listeners.insert(command, listener);
     }
 
-    pub(crate) async fn handle_message(&self, discord_message: &IncomingInteraction) {
+    pub(crate) async fn handle_message(&self, incoming_interaction: &IncomingInteraction) {
         for listener in self.listeners.iter() {
-            listener.1.on_message(discord_message).await;
+            listener.1.on_message(incoming_interaction).await;
         }
     }
 
-    pub async fn respond(response: InteractionResponse, discord_message: &IncomingInteraction) {
+    pub async fn respond(response: InteractionResponse, incoming_interaction: &IncomingInteraction) {
         let url = format!(
             "https://discord.com/api/v10/interactions/{}/{}/callback",
-            discord_message.id.as_ref().unwrap(),
-            discord_message.token.as_ref().unwrap()
+            incoming_interaction.id.as_ref().unwrap(),
+            incoming_interaction.token.as_ref().unwrap()
         );
 
         let response_body = {
