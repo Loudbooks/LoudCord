@@ -9,6 +9,8 @@ pub struct HttpListener {
 
 impl HttpListener {
     pub async fn start(&self) -> std::io::Result<()> {
+        sodiumoxide::init().unwrap();
+
         let server = {
             let this = tiny_http::Server::http("127.0.0.1:3000");
             match this {
