@@ -39,7 +39,10 @@ mod tests {
             Box::new(BasicListener {})
         );
 
-        let listener: HttpListener = HttpListener { listener_handler };
+        let listener: HttpListener = HttpListener { 
+            listener_handler,
+            public_key: std::env::var("PUBLIC_KEY").expect("PUBLIC_KEY must be set.")
+        };
 
         commandregisterer::register_commands(
             &std::env::var("BOT_TOKEN").expect("BOT_TOKEN must be set."),
@@ -75,7 +78,7 @@ impl Listener for BasicListener {
     async fn on_message(&self, discord_message: &IncomingInteraction) {
         let response: InteractionResponse = InteractionResponse {
             r#type: ResponseType::Message,
-            data: InteractionResponseData::builder()
+            data: Some(InteractionResponseData::builder()
                 .embeds(vec!(
                     EmbedBuilder::new()
                         .title("Title")
@@ -98,7 +101,7 @@ impl Listener for BasicListener {
                         )
                         .build()
                 )
-                .build()
+                .build())
         };
 
         self.interaction_callback(response, discord_message).await;

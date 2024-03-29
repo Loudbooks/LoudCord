@@ -1,24 +1,43 @@
 use std::str::FromStr;
 
-use sodiumoxide::crypto::sign;
-use sodiumoxide::hex;
-use tiny_http::{HeaderField, Request};
+use ed25519_dalek::{PublicKey, Signature, SignatureError, Verifier};
+use hex::FromHexError;
+use tiny_http::{Header, HeaderField};
 
-pub fn verify_message(mut request: Request, public_key: &str) -> bool {
-    let signature_header = &mut request.headers().iter().filter(|h| h.field.eq(&HeaderField::from_str("X-Signature-Ed25519").unwrap())).next().unwrap();
-    let timestamp_header = &mut request.headers().iter().filter(|h| h.field.eq(&HeaderField::from_str("X-Signature-Timestamp").unwrap())).next().unwrap();
+pub(crate) fn verify_message(
+    public_key: &str,
+    headers: &[Header],
+    body: &str,
+) -> Result<(), VerificationError> {
+    let signature = headers.iter().find(|h| h.field.eq(&HeaderField::from_str("X-Signature-Ed25519").unwrap())).unwrap().value.to_string();
+    let timestamp = headers.iter().find(|h| h.field.eq(&HeaderField::from_str("X-Signature-Timestamp").unwrap())).unwrap().value.to_string();
 
-    let signature = signature_header.value.as_str();
-    let timestamp = timestamp_header.value.as_str();
+    let public_key = &hex::decode(public_key)
+        .map_err(VerificationError::HexParseFailed)
+        .and_then(|bytes| {
+            PublicKey::from_bytes(&bytes).map_err(VerificationError::InvalidSignature)
+        })?;
 
-    let mut input = String::new();
-    request.as_reader().read_to_string(&mut input).unwrap();
+    Ok(
+        public_key.verify(
+        format!("{}{}", timestamp, body).as_bytes(),
+        &hex::decode(&signature)
+            .map_err(VerificationError::HexParseFailed)
+            .and_then(|bytes| {
+                Signature::from_bytes(&bytes).map_err(VerificationError::InvalidSignature)
+            })?,
+    )?)
+}
 
-    let message = format!("{}{}", timestamp, input);
 
-    sign::verify_detached(
-        &sign::Signature::from_str(message.clone().as_str()).unwrap(),
-        signature.as_bytes(),
-        &sign::PublicKey::from_slice(&hex::decode(public_key).unwrap()).unwrap()
-    )
+#[derive(Debug, thiserror::Error)]
+pub(crate) enum VerificationError {
+    #[error("Failed to parse from hex.")]
+    HexParseFailed(#[from] FromHexError),
+
+    #[error("Invalid public key provided.")]
+    InvalidPublicKey(#[from] SignatureError),
+
+    #[error("Invalid signature provided.")]
+    InvalidSignature(ed25519_dalek::ed25519::Error),
 }
