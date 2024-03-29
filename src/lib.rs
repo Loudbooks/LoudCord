@@ -19,23 +19,31 @@ pub mod http;
 
 #[cfg(test)]
 mod tests {
+    use dotenv::dotenv;
+    use crate::BasicListener;
+    use crate::discord::mapping::applicationcommandtype::ApplicationCommandType;
+    use crate::discord::mapping::applicationintegrationtype::ApplicationIntegrationType;
+    use crate::discord::mapping::applicationinteractioncontexttype::ApplicationInteractionContextType;
+    use crate::discord::objects::command::applicationcommand::ApplicationCommandBuilder;
+    use crate::http::commandregisterer;
     use crate::http::httplistener::HttpListener;
     use crate::http::listenerhandler::ListenerHandler;
 
     #[tokio::test]
     async fn main() {
+        dotenv().ok();
         let mut listener_handler: ListenerHandler = ListenerHandler::new();
 
-/*        listener_handler.add_listener(
+        listener_handler.add_listener(
             "test".to_string(),
-            Box::new(PingListener {})
-        );*/
+            Box::new(BasicListener {})
+        );
 
         let listener: HttpListener = HttpListener { listener_handler };
 
-        /*commandregisterer::register_commands(
-            "token",
-            "id",
+        commandregisterer::register_commands(
+            &std::env::var("BOT_TOKEN").expect("BOT_TOKEN must be set."),
+            &std::env::var("APPLICATION_ID").expect("APPLICATION_ID must be set."),
             vec!(
                 ApplicationCommandBuilder::new(
                     "test",
@@ -54,7 +62,7 @@ mod tests {
                     )
                     .build()
             )
-        ).await;*/
+        ).await;
 
         listener.start().await.unwrap();
     }
@@ -67,7 +75,7 @@ impl Listener for BasicListener {
     async fn on_message(&self, discord_message: &IncomingInteraction) {
         let response: InteractionResponse = InteractionResponse {
             r#type: ResponseType::Message,
-            data: Some(InteractionResponseData::builder()
+            data: InteractionResponseData::builder()
                 .embeds(vec!(
                     EmbedBuilder::new()
                         .title("Title")
@@ -90,7 +98,7 @@ impl Listener for BasicListener {
                         )
                         .build()
                 )
-                .build())
+                .build()
         };
 
         self.interaction_callback(response, discord_message).await;
