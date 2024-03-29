@@ -14,3 +14,4 @@ reqwest = "0.12.2"
 tokio = { version = "1.36.0", features = ["rt", "rt-multi-thread", "macros"] }
 async-trait = "0.1.79"
 sodiumoxide = "0.2.6"
+dotenv = "0.15.0"
