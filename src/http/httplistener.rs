@@ -1,6 +1,6 @@
 use tiny_http::Request;
-use crate::discord::objects::interaction::incominginteraction::IncomingInteraction;
 
+use crate::discord::objects::interaction::incominginteraction::IncomingInteraction;
 use crate::http::listenerhandler::ListenerHandler;
 
 pub struct HttpListener {
@@ -30,12 +30,15 @@ impl HttpListener {
         let mut input = String::new();
         request.as_reader().read_to_string(&mut input)?;
         
+        println!("Received: {}", input);
+        println!("{}", request.method());
+        
         let message = serde_json::from_str::<IncomingInteraction>(input.as_str()).unwrap_or_else(|e| {
             panic!("{:?}", e);
         });
 
         self.listener_handler.handle_message(&message).await;
-
+        
         Ok(())
     }
 }

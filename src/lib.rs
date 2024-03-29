@@ -19,7 +19,6 @@ pub mod http;
 
 #[cfg(test)]
 mod tests {
-    use crate::BasicListener;
     use crate::http::httplistener::HttpListener;
     use crate::http::listenerhandler::ListenerHandler;
 
@@ -27,10 +26,10 @@ mod tests {
     async fn main() {
         let mut listener_handler: ListenerHandler = ListenerHandler::new();
 
-        listener_handler.add_listener(
+/*        listener_handler.add_listener(
             "test".to_string(),
-            Box::new(BasicListener {})
-        );
+            Box::new(PingListener {})
+        );*/
 
         let listener: HttpListener = HttpListener { listener_handler };
 
@@ -68,7 +67,7 @@ impl Listener for BasicListener {
     async fn on_message(&self, discord_message: &IncomingInteraction) {
         let response: InteractionResponse = InteractionResponse {
             r#type: ResponseType::Message,
-            data: InteractionResponseData::builder()
+            data: Some(InteractionResponseData::builder()
                 .embeds(vec!(
                     EmbedBuilder::new()
                         .title("Title")
@@ -91,7 +90,7 @@ impl Listener for BasicListener {
                         )
                         .build()
                 )
-                .build()
+                .build())
         };
 
         self.interaction_callback(response, discord_message).await;

@@ -12,9 +12,9 @@ pub trait Listener {
     async fn reply(&self, response: &str, discord_message: &IncomingInteraction) {
         let response = InteractionResponse {
             r#type: ResponseType::Message,
-            data: InteractionResponseData::builder()
+            data: Some(InteractionResponseData::builder()
                 .content(response)
-                .build()
+                .build())
         };
 
         listenerhandler::ListenerHandler::respond(response, discord_message).await;
@@ -23,6 +23,10 @@ pub trait Listener {
     async fn interaction_callback(&self, response: InteractionResponse, discord_message: &IncomingInteraction) {
         println!("{}", serde_json::to_string(&response).unwrap());
         
+        listenerhandler::ListenerHandler::respond(response, discord_message).await;
+    }
+    
+    async fn respond(&self, response: InteractionResponse, discord_message: &IncomingInteraction) {
         listenerhandler::ListenerHandler::respond(response, discord_message).await;
     }
 }
