@@ -49,9 +49,7 @@ impl ListenerHandler {
         {
             let this = client.post(&url).headers(headers).body(response_body).send().await;
             match this {
-                Ok(response) => {
-                    let response_text = response.text().await.unwrap();
-                    println!("Response: {:?}", response_text);
+                Ok(_response) => {
                 }
                 Err(e) => panic!("{:?}", e),
             }

@@ -33,8 +33,6 @@ impl HttpListener {
         let mut input = String::new();
         request.as_reader().read_to_string(&mut input)?;
         
-        println!("Received: {}", input);
-        
         let is_valid = authorization::verify_message(self.public_key.as_str(), request.headers(), input.as_str());
         
         let message = serde_json::from_str::<IncomingInteraction>(input.as_str()).unwrap_or_else(|e| {

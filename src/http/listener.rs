@@ -21,8 +21,6 @@ pub trait Listener {
     }
 
     async fn interaction_callback(&self, response: InteractionResponse, discord_message: &IncomingInteraction) {
-        println!("{}", serde_json::to_string(&response).unwrap());
-        
         listenerhandler::ListenerHandler::respond(response, discord_message).await;
     }
     

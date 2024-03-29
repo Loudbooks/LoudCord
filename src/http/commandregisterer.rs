@@ -17,8 +17,6 @@ async fn discord_request(endpoint: &str, bot_token: &str, json: String) {
     headers.insert("Authorization", format!("Bot {}", bot_token).parse().unwrap());
     headers.insert("User-Agent", "DiscordBot (https://github.com/Loudbooks/LoudCord)".parse().unwrap());
     headers.insert(CONTENT_TYPE, "application/json".parse().unwrap());
-
-    println!("Request: {}", json);
     
     {
         let this = client
@@ -29,7 +27,6 @@ async fn discord_request(endpoint: &str, bot_token: &str, json: String) {
             .await;
         match this {
             Ok(_response) =>  {
-                println!("Response: {:?}", _response);
             }
             Err(e) => panic!("{:?}", e)
         }
