@@ -19,6 +19,26 @@ pub trait Listener {
 
         listenerhandler::ListenerHandler::respond(response, incoming_interaction).await;
     }
+    
+    async fn defer(&self, incoming_interaction: &IncomingInteraction) {
+        let response = InteractionResponse {
+            r#type: ResponseType::DeferredMessage,
+            data: None
+        };
+        
+        listenerhandler::ListenerHandler::respond(response, incoming_interaction).await;
+    }
+    
+    async fn edit(&self, response: &str, incoming_interaction: &IncomingInteraction) {
+        let response = InteractionResponse {
+            r#type: ResponseType::DeferredUpdateMessage,
+            data: Some(InteractionResponseData::builder()
+                .content(response)
+                .build())
+        };
+        
+        listenerhandler::ListenerHandler::respond(response, incoming_interaction).await;
+    }
 
     async fn interaction_callback(&self, response: InteractionResponse, incoming_interaction: &IncomingInteraction) {
         listenerhandler::ListenerHandler::respond(response, incoming_interaction).await;
