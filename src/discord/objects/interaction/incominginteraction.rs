@@ -3,9 +3,14 @@ use crate::discord::mapping::applicationcommandoptiontype::ApplicationCommandOpt
 use crate::discord::mapping::applicationcommandtype::ApplicationCommandType;
 use crate::discord::mapping::applicationinteractioncontexttype::ApplicationInteractionContextType;
 use crate::discord::mapping::interactiontype::InteractionType;
+use crate::discord::mapping::responsetype::ResponseType;
 use crate::discord::objects::channel::channel::Channel;
 use crate::discord::objects::command::applicationcommandinteractiondataoption::ApplicationCommandInteractionDataOption;
+use crate::discord::objects::response::interactionresponse::InteractionResponse;
+use crate::discord::objects::response::interactionresponsedata::InteractionResponseData;
 use crate::discord::objects::user::user::User;
+use crate::discord::objects::webhook::execute::Execute;
+use crate::http::{callbackhandler, webhookhandler};
 
 #[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize)]
@@ -46,4 +51,45 @@ pub struct Options {
     pub name: Option<String>,
     pub r#type: Option<ApplicationCommandOptionType>,
     pub value: Option<String>,
+}
+
+impl IncomingInteraction {
+    pub async fn reply(&self, response: &str, incoming_interaction: &IncomingInteraction) {
+        let response = InteractionResponse {
+            r#type: ResponseType::Message,
+            data: Some(InteractionResponseData::builder()
+                .content(response)
+                .build())
+        };
+
+        self.interaction_callback(response, incoming_interaction).await;
+    }
+
+    pub async fn defer(&self, incoming_interaction: &IncomingInteraction) {
+        let response = InteractionResponse {
+            r#type: ResponseType::DeferredMessage,
+            data: None
+        };
+
+        self.interaction_callback(response, incoming_interaction).await;
+    }
+
+    pub async fn edit(&self, response: &str, incoming_interaction: &IncomingInteraction) {
+        let response = InteractionResponse {
+            r#type: ResponseType::DeferredUpdateMessage,
+            data: Some(InteractionResponseData::builder()
+                .content(response)
+                .build())
+        };
+
+        self.interaction_callback(response, incoming_interaction).await;
+    }
+
+    pub async fn followup(&self, response: Execute, incoming_interaction: &IncomingInteraction) {
+        webhookhandler::create_callback(response, incoming_interaction).await;
+    }
+
+    pub async fn interaction_callback(&self, response: InteractionResponse, incoming_interaction: &IncomingInteraction) {
+        callbackhandler::callback(response, incoming_interaction).await;
+    }
 }

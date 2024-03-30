@@ -5,6 +5,7 @@ use async_trait::async_trait;
 use serde_json::Value;
 
 use crate::discord::objects::interaction::incominginteraction::IncomingInteraction;
+use crate::discord::objects::webhook::execute::Execute;
 use crate::http::listener::Listener;
 
 pub mod discord;
@@ -129,7 +130,7 @@ impl Listener for BasicListener {
         let options = incoming_interaction.data.clone().unwrap().options.unwrap();
         let input = options.get(0).unwrap();
 
-        self.reply(input.clone().value.unwrap().as_str(), incoming_interaction).await;
+        incoming_interaction.reply(input.clone().value.unwrap().as_str(), incoming_interaction).await;
     }
 }
 
@@ -146,8 +147,8 @@ impl Listener for DogListener {
         let response = reqwest::get(url).await.unwrap();
         let response = response.json::<Value>().await.unwrap();
         let image = response["message"].as_str().unwrap();
-        
-        self.reply(image, incoming_interaction).await;
+
+        incoming_interaction.reply(image, incoming_interaction).await;
     }
 }
 
@@ -162,8 +163,8 @@ impl Listener for CatListener {
         }
         
         let amount = extract_amount(incoming_interaction);
-        
-        self.defer(incoming_interaction).await;
+
+        incoming_interaction.defer(incoming_interaction).await;
         
         let url = format!("https://api.thecatapi.com/v1/images/search?limit={}", amount);
         let mut headers = reqwest::header::HeaderMap::new();
@@ -177,8 +178,13 @@ impl Listener for CatListener {
         
         let images = array.iter().map(|x| x["url"].as_str().unwrap()).collect::<Vec<&str>>();
         let image_str = images.join("\n");
-        
-        self.edit(image_str.as_str(), incoming_interaction).await;
+
+        incoming_interaction.followup(
+            Execute::builder()
+                .content(image_str.as_str())
+                .build(),
+            incoming_interaction
+        ).await;
     }
 }
 

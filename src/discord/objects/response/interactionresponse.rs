@@ -1,6 +1,7 @@
 use serde::Serialize;
-use crate::discord::objects::interaction::interactionresponsedata::InteractionResponseData;
+
 use crate::discord::mapping::responsetype::ResponseType;
+use crate::discord::objects::response::interactionresponsedata::InteractionResponseData;
 
 #[derive(Serialize)]
 pub struct InteractionResponse {

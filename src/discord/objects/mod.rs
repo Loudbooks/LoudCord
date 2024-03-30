@@ -6,3 +6,5 @@ pub mod embed;
 pub mod emoji;
 pub mod command;
 pub mod miscellaneous;
+pub mod response;
+pub mod webhook;
