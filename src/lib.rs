@@ -189,7 +189,14 @@ impl Listener for CatListener {
 }
 
 fn extract_amount(incoming_interaction: &IncomingInteraction) -> i32 {
-    let options = incoming_interaction.data.clone().unwrap().options.unwrap();
+    let options = incoming_interaction.data.clone().unwrap().options;
+    
+    if options.is_none() {
+        return 1;
+    }
+    
+    let options = options.unwrap();
+    
     let input = options.get(0);
     
     if input.is_none() || input.unwrap().value.is_none() {
