@@ -20,7 +20,7 @@ impl HttpListener {
             }
         };
 
-        println!("Listening on port 3000!");
+        println!("Listening on port {}!", port);
 
         for request in server.incoming_requests() {
             self.handle_connection(request).await?;
