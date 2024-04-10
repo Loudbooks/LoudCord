@@ -11,9 +11,9 @@ pub struct HttpListener {
 }
 
 impl HttpListener {
-    pub async fn start(&self) -> std::io::Result<()> {
+    pub async fn start(&self, port: i16) -> std::io::Result<()> {
         let server = {
-            let this = tiny_http::Server::http("127.0.0.1:3000");
+            let this = tiny_http::Server::http(format!("127.0.0.1:{}", port));
             match this {
                 Ok(t) => t,
                 Err(e) => panic!("{:?}", e),

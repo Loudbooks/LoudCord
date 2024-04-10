@@ -114,7 +114,7 @@ mod tests {
             )
         ).await;
 
-        listener.start().await.unwrap();
+        listener.start(std::env::var("PORT").expect("Failed to get port").parse::<i16>().expect("Failed to parse to u8")).await.unwrap();
     }
 }
 
