@@ -3,8 +3,12 @@
 use std::str::FromStr;
 use async_trait::async_trait;
 use serde_json::Value;
+use crate::discord::mapping::buttonstyle::ButtonStyle;
+use crate::discord::mapping::interactiontype::InteractionType;
 
 use crate::discord::objects::interaction::incominginteraction::IncomingInteraction;
+use crate::discord::objects::message::component::actionrow::ActionRow;
+use crate::discord::objects::message::component::button::Button;
 use crate::discord::objects::webhook::execute::Execute;
 use crate::http::listener::Listener;
 
@@ -114,6 +118,8 @@ mod tests {
             )
         ).await;
 
+        println!("Starting server...");
+
         listener.start(std::env::var("PORT").expect("Failed to get port").parse::<i16>().expect("Failed to parse to u8")).await.unwrap();
     }
 }
@@ -158,34 +164,58 @@ pub(crate) struct CatListener {}
 #[async_trait]
 impl Listener for CatListener {
     async fn on_message(&self, incoming_interaction: &IncomingInteraction) {
-        if !utils::is_command_name("kitty", incoming_interaction) {
+        if !utils::is_command_name("kitty", incoming_interaction) && incoming_interaction.r#type.is_some() && incoming_interaction.r#type.clone().unwrap() != InteractionType::MessageComponent {
             return;
         }
-        
-        let amount = extract_amount(incoming_interaction);
+
+        let image_str = get_cat_image();
+
+        if incoming_interaction.r#type.is_some() && incoming_interaction.r#type.clone().unwrap() == InteractionType::MessageComponent {
+            incoming_interaction.edit_followup(
+                Execute::builder()
+                    .content(image_str.await.as_str())
+                    .build(),
+                incoming_interaction
+            ).await;
+
+            return
+        }
 
         incoming_interaction.defer(incoming_interaction).await;
-        
-        let url = format!("https://api.thecatapi.com/v1/images/search?limit={}", amount);
-        let mut headers = reqwest::header::HeaderMap::new();
-        headers.insert("x-api-key", dotenv::var("CAT_API_KEY").unwrap().parse().unwrap());
-        
-        let client = reqwest::Client::new();
-        let response = client.get(url).headers(headers).send().await.unwrap();
-        
-        let response = response.json::<Value>().await.unwrap();
-        let array = response.as_array().unwrap();
-        
-        let images = array.iter().map(|x| x["url"].as_str().unwrap()).collect::<Vec<&str>>();
-        let image_str = images.join("\n");
-
-        incoming_interaction.followup(
+        incoming_interaction.post_followup(
             Execute::builder()
-                .content(image_str.as_str())
+                .content(image_str.await.as_str())
+                .components(
+                    vec![
+                        ActionRow::builder()
+                            .add_button(
+                                Button::builder(ButtonStyle::Secondary, "cat_refresh")
+                                    .label("Refresh")
+                                    .build())
+                            .build()
+                    ]
+                )
                 .build(),
             incoming_interaction
         ).await;
     }
+}
+
+async fn get_cat_image() -> String {
+    let url = format!("https://api.thecatapi.com/v1/images/search?limit={}", 1);
+    let mut headers = reqwest::header::HeaderMap::new();
+    headers.insert("x-api-key", dotenv::var("CAT_API_KEY").unwrap().parse().unwrap());
+
+    let client = reqwest::Client::new();
+    let response = client.get(url).headers(headers).send().await.unwrap();
+
+    let response = response.json::<Value>().await.unwrap();
+    let array = response.as_array().unwrap();
+
+    let images = array.iter().map(|x| x["url"].as_str().unwrap()).collect::<Vec<&str>>();
+    let image_str = images.join("\n");
+
+    return image_str
 }
 
 fn extract_amount(incoming_interaction: &IncomingInteraction) -> i32 {

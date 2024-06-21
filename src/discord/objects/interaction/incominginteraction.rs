@@ -1,3 +1,4 @@
+use reqwest::Method;
 use serde::{Deserialize, Serialize};
 use crate::discord::mapping::applicationcommandoptiontype::ApplicationCommandOptionType;
 use crate::discord::mapping::applicationcommandtype::ApplicationCommandType;
@@ -85,8 +86,12 @@ impl IncomingInteraction {
         self.interaction_callback(response, incoming_interaction).await;
     }
 
-    pub async fn followup(&self, response: Execute, incoming_interaction: &IncomingInteraction) {
-        webhookhandler::create_callback(response, incoming_interaction).await;
+    pub async fn post_followup(&self, response: Execute, incoming_interaction: &IncomingInteraction) {
+        webhookhandler::create_post_callback(response, incoming_interaction).await;
+    }
+
+    pub async fn edit_followup(&self, response: Execute, incoming_interaction: &IncomingInteraction) {
+        webhookhandler::create_callback(response, incoming_interaction, "/messages/@original", Method::PATCH).await;
     }
 
     pub async fn interaction_callback(&self, response: InteractionResponse, incoming_interaction: &IncomingInteraction) {
