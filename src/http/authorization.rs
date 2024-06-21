@@ -9,8 +9,20 @@ pub(crate) fn verify_message(
     headers: &[Header],
     body: &str,
 ) -> Result<(), VerificationError> {
-    let signature = headers.iter().find(|h| h.field.eq(&HeaderField::from_str("X-Signature-Ed25519").unwrap())).unwrap().value.to_string();
-    let timestamp = headers.iter().find(|h| h.field.eq(&HeaderField::from_str("X-Signature-Timestamp").unwrap())).unwrap().value.to_string();
+    let header_signature = &HeaderField::from_str("X-Signature-Ed25519");
+    let header_timestamp = &HeaderField::from_str("X-Signature-Timestamp");
+    
+    if header_signature.is_err() || header_timestamp.is_err() {
+        return Err(VerificationError::HexParseFailed(FromHexError::OddLength))
+    }
+    
+    
+    let signature = headers.iter().find(|h| h.field.eq(&header_signature.clone().unwrap()));
+    let timestamp = headers.iter().find(|h| h.field.eq(&header_timestamp.clone().unwrap()));
+    
+    if signature.is_none() || timestamp.is_none() {
+        return Err(VerificationError::HexParseFailed(FromHexError::OddLength))
+    }
 
     let public_key = &hex::decode(public_key)
         .map_err(VerificationError::HexParseFailed)
@@ -20,8 +32,8 @@ pub(crate) fn verify_message(
 
     Ok(
         public_key.verify(
-        format!("{}{}", timestamp, body).as_bytes(),
-        &hex::decode(&signature)
+        format!("{}{}", timestamp.unwrap().value.to_string(), body).as_bytes(),
+        &hex::decode(&signature.unwrap().value.to_string())
             .map_err(VerificationError::HexParseFailed)
             .and_then(|bytes| {
                 Signature::from_bytes(&bytes).map_err(VerificationError::InvalidSignature)

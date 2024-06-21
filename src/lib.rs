@@ -206,3 +206,13 @@ fn extract_amount(incoming_interaction: &IncomingInteraction) -> i32 {
     let amount = input.clone().unwrap().value.clone().unwrap();
     i32::from_str(amount.as_str()).unwrap()
 }
+
+#[macro_export]
+macro_rules! unwrap_or_return {
+    ( $e:expr ) => {
+        match $e {
+            Ok(x) => x,
+            Err(_) => return,
+        }
+    }
+}
