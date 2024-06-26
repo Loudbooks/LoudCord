@@ -37,9 +37,23 @@ impl HttpListener {
         
         println!("{}", input);
         
-        let message = serde_json::from_str::<IncomingInteraction>(input.as_str()).unwrap_or_else(|e| {
-            panic!("{:?}", e);
-        });
+        let message = serde_json::from_str::<IncomingInteraction>(input.as_str());
+        
+        if message.is_err() {
+            request.respond(tiny_http::Response::new(
+                tiny_http::StatusCode(400),
+                vec![],
+                "Bad Request".as_bytes(),
+                None,
+                None
+            )).unwrap();
+            
+            println!("Bad request!");
+            
+            return Ok(());
+        }
+        
+        let message = message.unwrap();
         
         if is_valid.is_err() {
             request.respond(tiny_http::Response::new(
@@ -56,7 +70,7 @@ impl HttpListener {
         } else {
             println!("Valid message!")
         }
- 
+        
         if message.r#type.clone().unwrap() == InteractionType::Ping {
             request.respond(tiny_http::Response::from_string("{\"type\": 1}")).unwrap();
             println!("Pong!");
